@@ -35,6 +35,7 @@ class SolarViewModel(private val settingsManager: SettingsManager) : ViewModel()
         repository?.disconnect()
         dataJob?.cancel()
         statusJob?.cancel()
+        _metricHistory.value = emptyMap() // Reset history on new connection
 
         val newRepo = SolarRepository(settingsManager.host, settingsManager.port)
         repository = newRepo
@@ -43,7 +44,10 @@ class SolarViewModel(private val settingsManager: SettingsManager) : ViewModel()
             newRepo.currentData.collect { data ->
                 _currentData.value = data
                 data?.data?.keys?.forEach { key ->
-                    fetchHistory(key)
+                    // Only fetch history if we don't have it yet for this session/connection
+                    if (!_metricHistory.value.containsKey(key)) {
+                        fetchHistory(key)
+                    }
                 }
             }
         }

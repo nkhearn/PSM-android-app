@@ -3,6 +3,7 @@ package com.nkhearn.psm
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -19,15 +20,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nkhearn.psm.settings.SettingsManager
 import com.nkhearn.psm.viewmodel.SolarViewModel
+import com.nkhearn.psm.viewmodel.SolarViewModelFactory
 import com.nkhearn.psm.ui.SimpleLineChart
 
 class MainActivity : ComponentActivity() {
-    private lateinit var viewModel: SolarViewModel
+    private val viewModel: SolarViewModel by viewModels {
+        SolarViewModelFactory(SettingsManager(this))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val settingsManager = SettingsManager(this)
-        viewModel = SolarViewModel(settingsManager)
 
         setContent {
             var showSettings by remember { mutableStateOf(false) }
