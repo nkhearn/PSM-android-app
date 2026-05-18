@@ -16,6 +16,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -142,6 +143,7 @@ fun DashboardScreen(viewModel: SolarViewModel, onOpenSettings: () -> Unit) {
 
 @Composable
 fun MetricCard(key: String, value: String, history: List<Double>) {
+    val iconRes = getIconForMetric(key)
     Card(
         modifier = Modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
@@ -152,11 +154,22 @@ fun MetricCard(key: String, value: String, history: List<Double>) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = key.replace("_", " ").replaceFirstChar { it.uppercase() },
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.Bold
-                )
+                Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(1f)) {
+                    if (iconRes != null) {
+                        Icon(
+                            painter = painterResource(id = iconRes),
+                            contentDescription = null,
+                            modifier = Modifier.size(24.dp),
+                            tint = Color.Unspecified
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                    }
+                    Text(
+                        text = displayName,
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
                 Text(
                     text = value,
                     style = MaterialTheme.typography.bodyMedium,
@@ -174,6 +187,20 @@ fun MetricCard(key: String, value: String, history: List<Double>) {
                 )
             }
         }
+    }
+}
+
+private fun getIconForMetric(key: String): Int? {
+    val k = key.lowercase()
+    return when {
+        k.contains("pv") || k.contains("solar") -> R.drawable.ic_solar_panel
+        k.contains("batt") || k.contains("soc") -> R.drawable.ic_solar_battery
+        k.contains("grid") -> R.drawable.ic_solar_grid
+        k.contains("load") || k.contains("home") || k.contains("house") -> R.drawable.ic_solar_home
+        k.contains("inv") -> R.drawable.ic_solar_inverter
+        k.contains("power") || k.contains("watt") -> R.drawable.ic_solar_bolt
+        k.contains("sun") || k.contains("lux") || k.contains("irradiance") -> R.drawable.ic_solar_sun
+        else -> null
     }
 }
 
