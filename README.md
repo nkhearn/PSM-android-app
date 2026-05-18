@@ -1,15 +1,51 @@
-# PSM-android-app
-An android app with widgets, that utilises Pi-Solar-monitor.
+# Pi Solar Monitor Android App (PSM-android-app)
 
-This android app utilises the api of https://github.com/nkhearn/Pi-Solar-monitor to display data. 
+An Android application and companion widgets for the [Pi-Solar-monitor](https://github.com/nkhearn/Pi-Solar-monitor) system.
 
-it utilises the websocket connection in app, and the api endpoint in widgets. 
+## 🌟 Features
 
-it is able to connect to your local network instance of the Pi-Solar-monitor server, configurable in the settings page (host and port).
+- **Real-time Monitoring**: Connects to the Pi-Solar-monitor WebSocket server for live data updates.
+- **Dynamic Dashboard**: Automatically lists all available metrics retrieved from the API.
+- **App Widgets**: Customizable widgets for your home screen to show real-time metrics (e.g., PV Power) and their last update time.
+- **Configurable Connection**: Easily set the host and port of your Pi-Solar-monitor instance within the app settings.
+- **Native Kotlin**: Built using modern Android development practices, including Jetpack Compose for the UI.
 
-the widgets are customisable, once a full list of metrics has been retrieved via the api.  the widgets can show a single chart or a single (current value) metric. 
-it also has widgets based on the daily report for yesterday. 
+## 🚀 Getting Started
 
-it is user friendly and comprehensive. 
+### Prerequisites
 
-it targets android 16
+- A running instance of [Pi-Solar-monitor](https://github.com/nkhearn/Pi-Solar-monitor) on your local network.
+- Android device running Android 5.0 (API 21) or higher.
+
+### Installation
+
+1. Clone this repository.
+2. Open the project in Android Studio.
+3. Build and run the app on your Android device.
+
+### Configuration
+
+1. Launch the app.
+2. Tap the **Settings** icon in the top-right corner.
+3. Enter the **Host** IP address and **Port** (default is 8000) of your Pi-Solar-monitor server.
+4. Tap **Save Settings**. The app will attempt to connect via WebSocket and fetch the latest data.
+
+## 📡 API Integration
+
+The app utilizes both REST and WebSocket endpoints from the Pi-Solar-monitor:
+
+- **WebSocket (`ws://<host>:<port>/ws`)**: Used for real-time `new_data` broadcasts.
+- **REST API (`http://<host>:<port>/api/last`)**: Used to fetch the most recent data point on app startup or when refreshing widgets.
+- **REST API (`http://<host>:<port>/api/keys`)**: Used to discover available metrics.
+
+## 🛠️ Architecture
+
+- **Jetpack Compose**: For a modern, declarative UI.
+- **ViewModel & StateFlow**: For reactive data management.
+- **Retrofit**: For REST API communication.
+- **OkHttp**: For WebSocket connections.
+- **App Widgets**: For home screen integration.
+
+## 📝 License
+
+This project is licensed under the MIT License.

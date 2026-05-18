@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Pi Solar Monitor</string>
+    <string name="host_label">Host</string>
+    <string name="port_label">Port</string>
+    <string name="save_button">Save Settings</string>
+    <string name="dashboard_title">Solar Dashboard</string>
+    <string name="settings_title">Settings</string>
+    <string name="live_data_label">Live Data</string>
+    <string name="connection_status_connected">Connected</string>
+    <string name="connection_status_disconnected">Disconnected</string>
+    <string name="no_data_available">No data available</string>
+</resources>
