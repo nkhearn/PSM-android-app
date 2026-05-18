@@ -69,7 +69,7 @@ class SolarRepository(private val host: String, private val port: Int) {
             val response = apiService.getLastData()
             _currentData.value = response
         } catch (e: Exception) {
-            // Handle error
+            android.util.Log.e("SolarRepository", "Error fetching last data", e)
         }
     }
 
@@ -78,6 +78,7 @@ class SolarRepository(private val host: String, private val port: Int) {
             val history = apiService.getMetricHistory(key, limit = 50)
             history.mapNotNull { it.getOrNull(1)?.toString()?.toDoubleOrNull() }
         } catch (e: Exception) {
+            android.util.Log.e("SolarRepository", "Error fetching history for $key", e)
             emptyList()
         }
     }

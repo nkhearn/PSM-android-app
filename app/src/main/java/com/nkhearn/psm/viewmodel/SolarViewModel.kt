@@ -9,6 +9,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class SolarViewModel(private val settingsManager: SettingsManager) : ViewModel() {
@@ -23,6 +24,8 @@ class SolarViewModel(private val settingsManager: SettingsManager) : ViewModel()
 
     private val _metricHistory = MutableStateFlow<Map<String, List<Double>>>(emptyMap())
     val metricHistory: StateFlow<Map<String, List<Double>>> = _metricHistory.asStateFlow()
+
+    private val fetchingKeys = mutableSetOf<String>()
 
     private var dataJob: Job? = null
     private var statusJob: Job? = null
@@ -45,7 +48,7 @@ class SolarViewModel(private val settingsManager: SettingsManager) : ViewModel()
                 _currentData.value = data
                 data?.data?.keys?.forEach { key ->
                     // Only fetch history if we don't have it yet for this session/connection
-                    if (!_metricHistory.value.containsKey(key)) {
+                    if (!_metricHistory.value.containsKey(key) && key != "timestamp") {
                         fetchHistory(key)
                     }
                 }
@@ -65,12 +68,19 @@ class SolarViewModel(private val settingsManager: SettingsManager) : ViewModel()
     }
 
     private fun fetchHistory(key: String) {
+        if (fetchingKeys.contains(key)) return
+        fetchingKeys.add(key)
+
         viewModelScope.launch {
-            repository?.let { repo ->
-                val history = repo.getMetricHistory(key)
-                val currentMap = _metricHistory.value.toMutableMap()
-                currentMap[key] = history
-                _metricHistory.value = currentMap
+            try {
+                repository?.let { repo ->
+                    val history = repo.getMetricHistory(key)
+                    _metricHistory.update { currentMap ->
+                        currentMap + (key to history)
+                    }
+                }
+            } finally {
+                fetchingKeys.remove(key)
             }
         }
     }
