@@ -4,9 +4,9 @@ import android.util.Log
 import com.google.gson.Gson
 import com.nkhearn.psm.models.WebSocketMessage
 import okhttp3.*
-import okio.ByteString
 
 class SolarWebSocketListener(
+    private val gson: Gson,
     private val onMessageReceived: (WebSocketMessage) -> Unit,
     private val onStatusChanged: (Boolean) -> Unit
 ) : WebSocketListener() {
@@ -19,7 +19,7 @@ class SolarWebSocketListener(
     override fun onMessage(webSocket: WebSocket, text: String) {
         Log.d("SolarWebSocket", "Message: $text")
         try {
-            val message = Gson().fromJson(text, WebSocketMessage::class.java)
+            val message = gson.fromJson(text, WebSocketMessage::class.java)
             onMessageReceived(message)
         } catch (e: Exception) {
             Log.e("SolarWebSocket", "Error parsing message", e)
