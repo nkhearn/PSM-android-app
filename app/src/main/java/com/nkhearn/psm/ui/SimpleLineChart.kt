@@ -34,7 +34,7 @@ fun SimpleLineChart(data: List<Double>, modifier: Modifier = Modifier) {
 
         drawPath(
             path = path,
-            color = Color.Blue,
+            color = MaterialTheme.colorScheme.primary,
             style = Stroke(width = 2.dp.toPx())
         )
     }
