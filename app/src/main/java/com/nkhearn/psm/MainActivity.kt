@@ -165,7 +165,7 @@ fun MetricCard(key: String, value: String, history: List<Double>) {
                         Spacer(modifier = Modifier.width(8.dp))
                     }
                     Text(
-                        text = key.replace("_", " ").replaceFirstChar { it.uppercase() },
+                        text = displayName,
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.Bold
                     )
