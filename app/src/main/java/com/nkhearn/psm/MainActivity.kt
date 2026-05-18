@@ -1,8 +1,10 @@
 package com.nkhearn.psm
 
 import android.os.Bundle
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -30,6 +32,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
 
         setContent {
             var showSettings by remember { mutableStateOf(false) }
@@ -64,9 +67,9 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DashboardScreen(viewModel: SolarViewModel, onOpenSettings: () -> Unit) {
-    val currentData by viewModel.currentData.collectAsState()
-    val isConnected by viewModel.isConnected.collectAsState()
-    val metricHistory by viewModel.metricHistory.collectAsState()
+    val currentData by viewModel.currentData.collectAsStateWithLifecycle()
+    val isConnected by viewModel.isConnected.collectAsStateWithLifecycle()
+    val metricHistory by viewModel.metricHistory.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
@@ -108,14 +111,21 @@ fun DashboardScreen(viewModel: SolarViewModel, onOpenSettings: () -> Unit) {
             Spacer(modifier = Modifier.height(16.dp))
 
             currentData?.let { response ->
+                val metrics = remember(response.data) {
+                    response.data.filterKeys { it != "timestamp" }.toList()
+                }
+
                 Text(
                     text = "Last update: ${response.timestamp}",
                     style = MaterialTheme.typography.labelSmall
                 )
                 Spacer(modifier = Modifier.height(8.dp))
 
-                LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    items(response.data.toList()) { (key, value) ->
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.weight(1f)
+                ) {
+                    items(metrics) { (key, value) ->
                         MetricCard(
                             key = key,
                             value = value.toString(),

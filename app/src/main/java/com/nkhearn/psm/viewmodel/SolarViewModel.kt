@@ -45,7 +45,7 @@ class SolarViewModel(private val settingsManager: SettingsManager) : ViewModel()
                 _currentData.value = data
                 data?.data?.keys?.forEach { key ->
                     // Only fetch history if we don't have it yet for this session/connection
-                    if (!_metricHistory.value.containsKey(key)) {
+                    if (!_metricHistory.value.containsKey(key) && key != "timestamp") {
                         fetchHistory(key)
                     }
                 }
