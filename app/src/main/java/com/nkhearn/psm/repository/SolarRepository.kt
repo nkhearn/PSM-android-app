@@ -54,7 +54,7 @@ class SolarRepository(private val host: String, private val port: Int) {
             val response = apiService.getLastData()
             _currentData.value = response
         } catch (e: Exception) {
-            // Handle error
+            android.util.Log.e("SolarRepository", "Error fetching last data", e)
         }
     }
 
