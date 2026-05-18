@@ -116,7 +116,7 @@ fun DashboardScreen(viewModel: SolarViewModel, onOpenSettings: () -> Unit) {
                 }
 
                 Text(
-                    text = "Last update: ${response.timestamp}",
+                    text = stringResource(R.string.last_update_label, response.timestamp),
                     style = MaterialTheme.typography.labelSmall
                 )
                 Spacer(modifier = Modifier.height(8.dp))
