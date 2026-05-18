@@ -1,0 +1,9 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="@color/solar_energy"
+        android:pathData="M11.5,2C11.2,2 11,2.21 11,2.5V9H7c-0.34,0 -0.57,0.38 -0.4,0.67l7,12c0.23,0.41 0.9,0.25 0.9,-0.17V15h4c0.34,0 0.57,-0.38 0.4,-0.67l-7,-12C11.83,2.11 11.67,2 11.5,2zM13,13.5v3.63L8.55,10.5H12c0.55,0 1,-0.45 1,-1V4.87l4.45,7.63H14C13.45,12.5 13,12.95 13,13.5z" />
+</vector>
